@@ -12,3 +12,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.header{
+  padding: 10px;
+  background-image: linear-gradient(
+      to right bottom, 
+      rgba(64, 226, 255, 0.678), 
+      rgba(255, 222, 89, 0.801)), 
+      url();
+  background-size: cover;
+  background-position: top;
+  position: relative;
+  margin-bottom: 20px;
+}
+.header-title{
+  color: #1d2187b7;
+}
+.table-template{
+  width: 80%;
+  margin: 0 auto;
+
+}
