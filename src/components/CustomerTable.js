@@ -1,52 +1,121 @@
-import React from "react";
+import React, { Component } from 'react';
 import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import Button from '@material-ui/core/Button';
-const CustomerTable = props => {
-  const columns = [
-    {
-        Header: "Name",
-        accessor: "firstname" // String-based value accessors!
-    },
-    {
-        Header: "Address",
-        accessor: "streetaddress",
-    },
-    {
-        Header: "Email",
-        accessor: "email",
+import EditCustomer from '../components/AddCustomer';
 
-    },
-    {
-        Header: "Phone",
-        accessor: "phone",
+export default class CustomerTable extends Component {
+  constructor(props) {
+    super(props);
+    this.state={
+      openDialog: false,
+      current: 'Edit',
+      firstname: '',
+      lastname:'',
+      postcode: '',
+      streetaddress: '',
+      email: '',
+      phone: '',
+      city: '',
+      url: ''
+    }
+  }
 
-    },
-    {
-        Header: "Trainings",
+  onHandleEditCustomer = (value) => {
+    const {firstname, lastname, postcode, streetaddress, email, phone, city}  = value;
+    const url = value.links[0].href;
+    this.setState({
+      openDialog: true,
+      firstname,
+      lastname,
+      postcode,
+      streetaddress,
+      email,
+      phone,
+      city, 
+      url
+    })
+    console.log(value);
+  }
+
+  onHandleCloseDialog = () => {
+    this.setState({openDialog: false})
+  }
+
+  onDeleteCustomer = (value) => {
+    if (window.confirm("Are you sure? ")) {
+      fetch(value.links[0].href, {
+        method: 'DELETE',
+        headers: {
+        'Content-Type': 'application/json'
+        }
+      })
+      .then(res => {
+          this.props.fetchingData();
+      })
+      .catch(err => console.error(err));
+    }
+  }
+  render() {
+    const columns = [
+      {
+          Header: "Name",
+          accessor: "firstname" // String-based value accessors!
+      },
+      {
+          Header: "Address",
+          accessor: "streetaddress",
+      },
+      {
+          Header: "Email",
+          accessor: "email",
+  
+      },
+      {
+          Header: "Phone",
+          accessor: "phone",
+      },
+      {
+        Header: "Delete",
         filterable: false,
         sortable: false,
         accessor: "_links.self.href",
-        Cell: value => <Button color="secondary" onClick={() => console.log(value)}>Delete</Button>
-    }, 
-    // {
-    //   Header: "",
-    //   accessor: "date",
-    //   sortable: false,
-    //   filterable: false,
-    //   Cell: row => <button onClick={() => props.deleteTodo(row)}>Delete</button>
-    // }
-  ];
-  return (
-    <div className="table-template">
-      <ReactTable
-        data={props.customers}
-        defaultPageSize={10}
-        columns={columns}
-        filterable={true}
-      />
-    </div>
-  );
-};
+        Cell: value => <Button color="primary" onClick={() => this.onHandleEditCustomer(value.row._original)}>Edit</Button>
+      },
+      {
+          Header: "Trainings",
+          filterable: false,
+          sortable: false,
+          accessor: "_links.self.href",
+          Cell: value => <Button color="secondary" onClick={() => this.onDeleteCustomer(value.row._original)}>Delete</Button>
+      }, 
+    ];
 
-export default CustomerTable;
+    const {firstname, lastname, postcode, streetaddress, email, phone, city, url}  = this.state;
+    return (
+      <div className="table-template">
+        <ReactTable
+          data={this.props.customers}
+          defaultPageSize={10}
+          columns={columns}
+          filterable={true}
+        /> 
+
+        <EditCustomer
+          onHandleCloseDialog={this.onHandleCloseDialog}
+          openDialog={this.state.openDialog}
+          fetchingData={this.props.fetchingData}
+          current={this.state.current}
+          firstname={firstname}
+          lastname={lastname}
+          postcode={postcode}
+          streetaddress={streetaddress}
+          email={email}
+          phone={phone}
+          city={city}
+          url={url}
+        />
+      </div>
+    )
+  }
+}

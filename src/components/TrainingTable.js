@@ -4,6 +4,20 @@ import 'react-table/react-table.css';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
 const TrainingTable = props => {
+
+  const deleteTraining = (link) => {
+    if (window.confirm("Are you sure? ")) {
+      fetch(link, {
+        method: 'DELETE',
+        headers: {
+        'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        props.fetchingData();
+      }).catch(err => console.error(err));
+    }
+  }
+  
   const columns = [
     {
         Header: "Activity",
@@ -23,7 +37,7 @@ const TrainingTable = props => {
         filterable: false,
         sortable: false,
         accessor: "_links.self.href",
-        Cell: value => <Button color="secondary" onClick={() => console.log(value)}>Delete</Button>
+        Cell: value => <Button color="secondary" onClick={() => deleteTraining(value.row._original.links[0].href)}>Delete</Button>
     }, 
     // {
     //   Header: "",
