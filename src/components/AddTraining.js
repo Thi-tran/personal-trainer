@@ -132,7 +132,7 @@ export default class AddTraining extends Component {
             />
 
             <FormControl fullWidth>
-                <InputLabel htmlFor="select-multiple">Input customers</InputLabel>
+                <InputLabel htmlFor="select-multiple">Customer</InputLabel>
                 <Select
                     value={customer}
                     onChange={this.handleChangeCustomer}
