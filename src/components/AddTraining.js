@@ -33,7 +33,7 @@ const initialState = {
     date:'',
     activity:'',
     duration: '',
-    customer: []
+    customer: ''
 }
 
 export default class AddTraining extends Component {

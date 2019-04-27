@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import AddCustomer from '../components/AddCustomer';
 import AddTraining from '../components/AddTraining';
+import FindTraining from '../components/FindTraining';
 import { NavLink } from 'react-router-dom';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -16,6 +17,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
+import { UserContext } from '../App';
 
 
 const styles = theme => ({
@@ -28,8 +31,13 @@ const styles = theme => ({
   },
 });
 
+const HomePageContainer = () => (
+  <UserContext.Consumer>
+      {({user}) => <HomePage user={user} />}
+  </UserContext.Consumer>
+)
 
-class App extends Component {
+class HomePage extends Component {
 
   constructor(props) {
     super(props);
@@ -42,7 +50,7 @@ class App extends Component {
       addTraining: false,
       current: 'Add',
       openFindCustomer: false,
-      customerID: '',
+      customerURL: '',
       showCalendar: false
     }
   }
@@ -71,7 +79,7 @@ class App extends Component {
 
   onHandleChangeSearch = (event) => {
     this.setState({search: event.target.value})
-    this.setState({showTable: false})
+    this.setState({showTable: false, showCalendar: false})
   }
 
   onHandleCloseAddTraining = () => {
@@ -82,21 +90,38 @@ class App extends Component {
     this.setState({openDialog: false});
   }
 
+
+  onHandleCloseFindTraining = () => {
+    this.setState({openFindCustomer: false})
+  }
   onSubmitFindCustomerTraining = () => {
     this.setState({
       showCalendar: true,
+      openFindCustomer: false,
+      showTable: false
     })
   }
 
+  onChangeCustomerURL = (event) => {
+    this.setState({customerURL: event.target.value})
+  }
+
+
   render() {
     const { classes } = this.props;
-    const {search, showTable, customerID, showCalendar} = this.state;
+    const {search, showTable, customerURL, showCalendar} = this.state;
     return (
+      <UserContext.Consumer>    
+      {({user, logout}) => 
+
       <div className="App">
         <div className="header justify-content-between d-flex mx-auto">
             <h1 className="mx-auto header-title">Personal Trainer Database</h1>
         </div>
-        
+        {user && <div>
+          <h5>Hello {user.displayName} <button onClick={logout} className="btn btn-light">Log Out</button></h5>
+        </div>}
+
         <div className="">
           <select 
             className="custom-select" 
@@ -149,47 +174,29 @@ class App extends Component {
           fetchingData={this.fetchingData}
         />
 
-      <Dialog
-        open={this.state.openFindCustomer}
-        onClose={() => this.setState({openFindCustomer: false})}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">View trainings customer with ID</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            name="date"
-            label="Date"
-            type="text"
-            fullWidth
-            value={customerID}
-            onChange={(event) => {this.setState({customerID: event.target.value })}}
-          />
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={() => this.setState({openFindCustomer: false})}>
-            Cancel
-          </Button>
-          <Button onClick={()=> this.setState({openFindCustomer: false, showCalendar: true})} color="primary">
-            Find trainings
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <FindTraining 
+          openFindCustomer={this.state.openFindCustomer}
+          onHandleCloseFindTraining={this.onHandleCloseFindTraining}
+          customerURL={customerURL}
+          onChangeCustomerURL={this.onChangeCustomerURL}
+          onSubmitFindCustomerTraining={this.onSubmitFindCustomerTraining}
+        />
 
         {showCalendar && <CalendarView 
-          customerID={this.state.customerID}
+          customerURL={customerURL}
         />}
 
 
       </div>
+      }
+        </UserContext.Consumer>
     );
   }
 }
-App.propTypes = {
+HomePage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
 
-export default withStyles(styles)(App);
+
+export default withStyles(styles)(HomePage);

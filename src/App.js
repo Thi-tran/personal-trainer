@@ -34,14 +34,15 @@ class App extends Component {
       })
   }
 
-  login = () => {
-    auth.signInWithPopup(provider)
+  login = async () => {
+    await auth.signInWithPopup(provider)
       .then((result) => {
         const user = result.user;
         this.setState({
           user
         })
       })
+    console.log(this.state.user)
   }
 
   
@@ -49,9 +50,14 @@ class App extends Component {
     const {user} = this.state;
     const {logout} = this;
     return (
-      <div>
-        <AppRouter user={user} logout={logout}/>      
+      <div className="App"> 
+        <UserContext.Provider value={{user, logout}}>
+          <AppRouter user={user} logout={logout}/>   
+        </UserContext.Provider>  
+
+        {!user && <button className="btn btn-primary" onClick={this.login}>Login with Google</button>}
       </div>
+      
     );
   }
 }

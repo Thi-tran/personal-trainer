@@ -18,8 +18,8 @@ const transformEvents = (events) => {
         eventsUpdate.push({
             id,
             title: event.activity,
-            start: String(moment(event.date)._d),
-            end: String(moment(event.date).add(event.duration, 'days')._d)
+            start: moment(event.date)._d,
+            end: moment(event.date).add(event.duration, 'days')._d
         })
         id ++;
     })
@@ -31,17 +31,23 @@ export default class CalendarView extends Component {
     constructor(props) {
         super(props);
         this.state={
-            events: []
+            events: [],
+            customer: {}
         }   
     }
         
     componentDidMount() {
-        fetch(`https://customerrest.herokuapp.com/api/customers/${this.props.customerID}/trainings`)
+        fetch(`${this.props.customerURL}/trainings`)
         .then(response => response.json())
         .then(result => {
             const events = transformEvents(result.content);
             this.setState({events});
         })
+        .catch(err => console.log(err))
+
+        fetch(`${this.props.customerURL}`)
+        .then(response => response.json())
+        .then(customer => this.setState({customer}))
         .catch(err => console.log(err))
     }
     
@@ -50,7 +56,7 @@ export default class CalendarView extends Component {
         console.log(events)
         return (
             <div>
-                <h2>Trainings of customer with ID {this.props.customerID}</h2>
+                <h2>Trainings of {this.state.customer.firstname} {this.state.customer.lastname}</h2>
                 <div style={{height: 700}}>
                     <BigCalendar
                         localizer={localizer}
