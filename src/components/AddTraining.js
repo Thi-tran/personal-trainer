@@ -51,7 +51,6 @@ export default class AddTraining extends Component {
         .then(response => response.json())
         .then(result => {this.setState({listCustomers: result.content})})
         .catch(err => console.error(err))
-  
     }
       
     handleChange = (e) => {
@@ -96,7 +95,9 @@ export default class AddTraining extends Component {
             onClose={this.props.onHandleCloseAddTraining}
             aria-labelledby="form-dialog-title"
         >
+        
         <DialogTitle id="form-dialog-title">Add new training</DialogTitle>
+
         <DialogContent>
             <DialogContentText>
                 Input date, activity, duration and customers
@@ -130,7 +131,6 @@ export default class AddTraining extends Component {
                 value={duration}
                 onChange={this.handleChange}
             />
-
             <FormControl fullWidth>
                 <InputLabel htmlFor="select-multiple">Customer</InputLabel>
                 <Select
@@ -146,9 +146,8 @@ export default class AddTraining extends Component {
                     ))}
                 </Select>
             </FormControl>
-    
-
         </DialogContent>
+
         <DialogActions>
             <Button onClick={this.props.onHandleCloseAddTraining}>
                 Cancel
@@ -157,6 +156,7 @@ export default class AddTraining extends Component {
                 Add Training
             </Button>
         </DialogActions>
+
     </Dialog>
     )
   }
