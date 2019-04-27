@@ -60,7 +60,8 @@ export default class CustomerTable extends Component {
     const columns = [
       {
           Header: "Name",
-          accessor: "firstname" // String-based value accessors!
+          accessor: "firstname", // String-based value accessors!
+          Cell: props => <span>{props.original.firstname} {props.original.lastname}</span> // Custom cell components!
       },
       {
           Header: "Address",
@@ -76,14 +77,14 @@ export default class CustomerTable extends Component {
           accessor: "phone",
       },
       {
-        Header: "Delete",
+        Header: "",
         filterable: false,
         sortable: false,
         accessor: "_links.self.href",
         Cell: value => <Button color="primary" onClick={() => this.onHandleEditCustomer(value.row._original)}>Edit</Button>
       },
       {
-          Header: "Trainings",
+          Header: "",
           filterable: false,
           sortable: false,
           accessor: "_links.self.href",

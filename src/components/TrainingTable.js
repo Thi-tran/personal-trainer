@@ -28,10 +28,15 @@ const TrainingTable = props => {
         accessor: "duration",
     },
     {
-        Header: "Date",
-        accessor: "date",
-        Cell: props => <span className='number'>{moment(props.value).format("D MMM YYYY")}</span> // Custom cell components!
-      },
+      Header: "Date",
+      accessor: "date",
+      Cell: props => <span className='number'>{moment(props.value).format("D MMM YYYY")}</span> // Custom cell components!
+    },
+    {
+      Header: "Customer",
+      accessor: "customer",
+      Cell: props => <span className='number'>{props.value.firstname} {props.value.lastname}</span> // Custom cell components!
+    },
     {
         Header: "",
         filterable: false,

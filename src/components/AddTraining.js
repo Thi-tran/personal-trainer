@@ -89,7 +89,7 @@ export default class AddTraining extends Component {
 
   render() {
     const {date, activity, duration, customer, listCustomers}  = this.state;
-    console.log(customer);
+
     return (
         <Dialog
             open={this.props.addTraining}
