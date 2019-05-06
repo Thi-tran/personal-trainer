@@ -61,7 +61,7 @@ class HomePage extends Component {
 
   onSearch = async () => {
     this.fetchingData();
-    this.setState({showTable: true})
+    this.setState({showTable: true, showCalendar: false})
   }
 
   onHandleChangeSearch = (event) => {
