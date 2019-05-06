@@ -1,5 +1,5 @@
 /* eslint no-fallthrough: off */
-import dateMath from 'date-arithmetic'
+import dateMath from 'date-arithmetic';
 
 const MILLI = {
   seconds: 1000,

@@ -3,7 +3,6 @@ import ReactTable from "react-table";
 import 'react-table/react-table.css';
 import Button from '@material-ui/core/Button';
 import EditCustomer from '../components/AddCustomer';
-import events from '../data/event';
 export default class CustomerTable extends Component {
   constructor(props) {
     super(props);

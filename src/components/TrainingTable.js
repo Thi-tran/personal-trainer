@@ -6,10 +6,7 @@ import moment from 'moment';
 import React, { Component } from 'react'
 
 export default class TrainingTable extends Component {
-  constructor(props) {
-    super(props);
-    
-  }
+
   
   deleteTraining = (trainingID) => {
     if (window.confirm("Are you sure? ")) {

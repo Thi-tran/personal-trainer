@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import events from "../data/event";
 import BigCalendar from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
